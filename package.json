@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "knex": "node —no-warnings —loader tsx ./node_modules/.bin/knex",
-    "dev": "tsx watch src/server.ts"
+    "knex": "node --no-warnings --loader tsx ./node_modules/.bin/knex",
+    "dev": "tsx watch src/server.ts",
+    "migrate:create": "npm run knex -- migrate:make --migrations-directory ./db/migrations -x ts"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +23,7 @@
     "dotenv": "^16.3.1",
     "fastify": "^4.22.0",
     "knex": "^2.5.1",
-    "sqlite": "^5.0.1",
+    "sqlite3": "^5.1.6",
     "zod": "^3.22.2"
   }
 }
