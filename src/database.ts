@@ -8,6 +8,7 @@ export const config: Knex.Config = {
   connection: {
     filename: './db/app.db',
   },
+  useNullAsDefault: true,
   migrations: {
     extension: 'ts',
     directory: './db/migrations',
