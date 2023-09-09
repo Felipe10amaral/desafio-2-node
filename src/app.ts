@@ -1,6 +1,9 @@
 import fastify from 'fastify'
-import { snackRouter } from './routes'
+import { usersRoutes } from './users/routes'
+
 
 export const app = fastify()
 
-app.register(snackRouter)
+app.register(usersRoutes)
+
+
