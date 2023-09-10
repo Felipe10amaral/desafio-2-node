@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { FastifyReply, FastifyRequest } from "fastify";
-import {knex} from "../database";
+import {knex} from "../../database";
 import { z } from "zod";
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
@@ -18,8 +18,8 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
             password
         })
 
-    } catch (e) {
-        return reply.status(400).send(e)
+    } catch (error) {
+        return reply.status(400).send(error)
     }
 
     return reply.status(201).send()
