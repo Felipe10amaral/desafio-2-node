@@ -1,4 +1,4 @@
-import {env} from './env/index'
+import { env } from './env/index'
 import { knex as knexSetup, Knex } from 'knex'
 
 console.log(process.env)
