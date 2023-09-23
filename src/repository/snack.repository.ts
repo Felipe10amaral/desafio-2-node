@@ -25,6 +25,10 @@ class SnackRepository {
     const snacks = await knex('snacks').select('*').returning('*')
     return snacks
   }
+
+  async delete(id: string) {
+    await knex('snacks').delete().where({ id_snack: id })
+  }
 }
 
 export default new SnackRepository()

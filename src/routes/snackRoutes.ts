@@ -8,4 +8,8 @@ export async function snacksRoutes(app: FastifyInstance) {
   app.get('/snacks', (request: FastifyRequest, reply: FastifyReply) => {
     snackServices.list(request, reply)
   })
+
+  app.delete('/snacks/:id', (request: FastifyRequest, reply: FastifyReply) => {
+    snackServices.delete(request, reply)
+  })
 }

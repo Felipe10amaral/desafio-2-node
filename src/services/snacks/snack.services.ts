@@ -38,6 +38,17 @@ class Snack {
       return reply.status(400).send(error)
     }
   }
+
+  async delete(request: FastifyRequest, reply: FastifyReply) {
+    const { id } = request.params as { id: string }
+
+    try {
+      await snackRepository.delete(id)
+      return reply.status(204).send()
+    } catch (error) {
+      return reply.status(500).send(error)
+    }
+  }
 }
 
 export default new Snack()
