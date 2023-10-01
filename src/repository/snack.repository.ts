@@ -26,8 +26,28 @@ class SnackRepository {
     return snacks
   }
 
+  async listOne(id: string) {
+    const snacks = await knex('snacks')
+      .select()
+      .where({ id_snack: id })
+      .returning('*')
+    return snacks
+  }
+
   async delete(id: string) {
     await knex('snacks').delete().where({ id_snack: id })
+  }
+
+  async edit(id: string, newSnack: Partial<ISnacks>) {
+    const update = await knex('snacks').where({ id_snack: id }).update(newSnack)
+
+    if (update > 0) {
+      console.log('Atualizado com sucesso')
+      return 1
+    } else {
+      console.log('Nenhum registro foi atualizado com o ID especificado.')
+      return 0
+    }
   }
 }
 
