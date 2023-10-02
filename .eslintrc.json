@@ -4,7 +4,9 @@
     ],
 
     "rules": {
-      "camelcase":"off" 
+      "camelcase":"off",
+      "prefer-const": "off"
+       
     }
     
    

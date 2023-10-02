@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import snackRepository from '../../repository/snack.repository'
 import { ISnack } from '../../model/ISnack'
+import { randomUUID } from 'crypto'
 
 interface RequestBody {
   id_snack: string
@@ -24,17 +25,28 @@ function validatedUpdated(snack: ISnack) {
 }
 
 class Snack {
-  async create(request: FastifyRequest, reply: FastifyReply) {
+  async create(request, reply) {
     const snackBodySchema = z.object({
       name: z.string(),
       description: z.string(),
       created_at: z.string(),
       diet: z.string(),
-      session_id: z.string(),
     })
 
-    const { name, description, created_at, diet, session_id } =
-      snackBodySchema.parse(request.body)
+    const { name, description, created_at, diet } = snackBodySchema.parse(
+      request.body,
+    )
+
+    let sessionID = request.cookies.session_id
+
+    if (!sessionID) {
+      sessionID = randomUUID()
+
+      reply.setCookie('session_id', sessionID, {
+        path: '/',
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
+      })
+    }
 
     try {
       snackRepository.create({
@@ -42,7 +54,7 @@ class Snack {
         description,
         created_at,
         diet,
-        session_id,
+        session_id: sessionID,
       })
     } catch (error) {
       return reply.status(400).send(error)
