@@ -12,4 +12,8 @@ export async function usersRoutes(app: FastifyInstance) {
   app.post('/login', (request: FastifyRequest, reply: FastifyReply) => {
     userServices.login(request, reply)
   })
+
+  app.delete('/user/:id', (request: FastifyRequest, reply: FastifyReply) => {
+    userServices.delete(request, reply)
+  })
 }

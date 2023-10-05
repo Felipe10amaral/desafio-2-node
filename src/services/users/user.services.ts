@@ -66,6 +66,17 @@ class UserServices {
 
     return reply.status
   }
+
+  async delete(request, reply) {
+    const { id } = request.params as { id: string }
+
+    try {
+      await userRepository.delete(id)
+      return reply.status(204).send({ message: ' user deleted' })
+    } catch (error) {
+      return reply.status(400).send({ error: 'error' })
+    }
+  }
 }
 
 export default new UserServices()

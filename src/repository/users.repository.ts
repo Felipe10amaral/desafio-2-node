@@ -28,6 +28,10 @@ class UserRepository {
 
     return { user }
   }
+
+  async delete(id: string) {
+    await knex('users').delete().where({ id })
+  }
 }
 
 export default new UserRepository()
