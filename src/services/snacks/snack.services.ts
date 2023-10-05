@@ -1,8 +1,6 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import snackRepository from '../../repository/snack.repository'
 import { ISnack } from '../../model/ISnack'
-import { randomUUID } from 'crypto'
 
 interface RequestBody {
   id_snack: string
@@ -37,16 +35,7 @@ class Snack {
       request.body,
     )
 
-    let sessionID = request.cookies.session_id
-
-    if (!sessionID) {
-      sessionID = randomUUID()
-
-      reply.setCookie('session_id', sessionID, {
-        path: '/',
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 dias
-      })
-    }
+    const userID = request.user.id
 
     try {
       snackRepository.create({
@@ -54,7 +43,7 @@ class Snack {
         description,
         created_at,
         diet,
-        session_id: sessionID,
+        session_id: userID,
       })
     } catch (error) {
       return reply.status(400).send(error)
@@ -63,7 +52,7 @@ class Snack {
     return reply.status(201).send()
   }
 
-  async list(request: FastifyRequest, reply: FastifyReply) {
+  async list(request, reply) {
     try {
       const snacks = await snackRepository.list()
       return reply.status(200).send(snacks)
@@ -72,7 +61,7 @@ class Snack {
     }
   }
 
-  async delete(request: FastifyRequest, reply: FastifyReply) {
+  async delete(request, reply) {
     const { id } = request.params as { id: string }
 
     console.log(id)
@@ -85,7 +74,7 @@ class Snack {
     }
   }
 
-  async update(request: FastifyRequest, reply: FastifyReply) {
+  async update(request, reply) {
     const { name, description, created_at, diet } = request.body as RequestBody
     const { id } = request.params as { id: string }
 
@@ -108,7 +97,7 @@ class Snack {
     }
   }
 
-  async listOne(request: FastifyRequest, reply: FastifyReply) {
+  async listOne(request, reply) {
     const { id } = request.params as { id: string }
 
     try {

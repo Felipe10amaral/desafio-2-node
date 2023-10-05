@@ -8,4 +8,8 @@ export async function usersRoutes(app: FastifyInstance) {
   app.get('/users', (request: FastifyRequest, reply: FastifyReply) => {
     userServices.list(request, reply)
   })
+
+  app.post('/login', (request: FastifyRequest, reply: FastifyReply) => {
+    userServices.login(request, reply)
+  })
 }
