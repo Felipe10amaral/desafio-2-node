@@ -107,6 +107,17 @@ class Snack {
       return reply.status(400).send(error)
     }
   }
+
+  async listSnacksPerUsers(request, reply) {
+    const { id } = request.params as { id: string }
+
+    try {
+      const snackPerUser = await snackRepository.listSancksPerOneUser(id)
+      return reply.status(200).send(snackPerUser)
+    } catch (error) {
+      return reply.status(400).send({ error: 'user not snacks' })
+    }
+  }
 }
 
 export default new Snack()

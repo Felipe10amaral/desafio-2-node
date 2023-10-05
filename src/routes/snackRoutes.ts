@@ -20,14 +20,18 @@ export async function snacksRoutes(app: FastifyInstance) {
   )
 
   app.get('/snacks/:id', (request: FastifyRequest, reply: FastifyReply) => {
+    snackServices.listSnacksPerUsers(request, reply)
+  })
+
+  app.get('/snack/:id', (request: FastifyRequest, reply: FastifyReply) => {
     snackServices.listOne(request, reply)
   })
 
-  app.delete('/snacks/:id', (request: FastifyRequest, reply: FastifyReply) => {
+  app.delete('/snack/:id', (request: FastifyRequest, reply: FastifyReply) => {
     snackServices.delete(request, reply)
   })
 
-  app.put('/snacks/:id', (request: FastifyRequest, reply: FastifyReply) => {
+  app.put('/snack/:id', (request: FastifyRequest, reply: FastifyReply) => {
     snackServices.update(request, reply)
   })
 }

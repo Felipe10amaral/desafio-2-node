@@ -6,6 +6,7 @@ interface IUser {
   name: string
   password: string
 }
+
 class UserRepository {
   async create({ name, password }: IUser) {
     await knex('users').insert({

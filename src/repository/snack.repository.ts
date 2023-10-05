@@ -46,6 +46,17 @@ class SnackRepository {
       return 0
     }
   }
+
+  async listSancksPerOneUser(id: string) {
+    const snacks = await knex('snacks')
+      .select('name', 'description', 'snacks.session_id')
+      .where('session_id', id)
+      .returning('*')
+
+    console.log(snacks)
+
+    return snacks
+  }
 }
 
 export default new SnackRepository()

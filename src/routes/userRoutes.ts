@@ -5,6 +5,7 @@ export async function usersRoutes(app: FastifyInstance) {
   app.post('/users', (request: FastifyRequest, reply: FastifyReply) => {
     userServices.create(request, reply)
   })
+
   app.get('/users', (request: FastifyRequest, reply: FastifyReply) => {
     userServices.list(request, reply)
   })
