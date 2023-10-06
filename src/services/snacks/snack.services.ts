@@ -8,6 +8,7 @@ interface RequestBody {
   description: string
   created_at: string
   diet: string
+  session_id: string
 }
 
 function validatedUpdated(snack: ISnack) {
@@ -16,6 +17,7 @@ function validatedUpdated(snack: ISnack) {
     description: z.string(),
     created_at: z.string(),
     diet: z.string(),
+    session_id: z.string(),
   })
 
   const newSnack = updateSnack.parse(snack)
@@ -75,16 +77,16 @@ class Snack {
   }
 
   async update(request, reply) {
-    const { name, description, created_at, diet } = request.body as RequestBody
+    const { name, description, created_at, diet, session_id } =
+      request.body as RequestBody
     const { id } = request.params as { id: string }
-
-    console.log(id)
 
     const snack = {
       name,
       description,
       created_at,
       diet,
+      session_id,
     }
 
     const newSnack = validatedUpdated(snack)

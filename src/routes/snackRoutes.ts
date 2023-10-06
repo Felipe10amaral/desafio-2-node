@@ -19,9 +19,13 @@ export async function snacksRoutes(app: FastifyInstance) {
     },
   )
 
-  app.get('/snacks/:id', (request: FastifyRequest, reply: FastifyReply) => {
-    snackServices.listSnacksPerUsers(request, reply)
-  })
+  app.get(
+    '/snacks/:id',
+    { preHandler: [authorization] },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      snackServices.listSnacksPerUsers(request, reply)
+    },
+  )
 
   app.get('/snack/:id', (request: FastifyRequest, reply: FastifyReply) => {
     snackServices.listOne(request, reply)
