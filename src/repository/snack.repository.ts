@@ -9,6 +9,13 @@ interface ISnacks {
   session_id: string
 }
 
+interface IMetrics {
+  total: number
+  inDiet: number
+  offDiet: number
+  maxSequence: number
+}
+
 class SnackRepository {
   async create({ name, description, created_at, diet, session_id }: ISnacks) {
     await knex('snacks').insert({
@@ -49,13 +56,52 @@ class SnackRepository {
 
   async listSancksPerOneUser(id: string) {
     const snacks = await knex('snacks')
-      .select('name', 'description', 'snacks.session_id')
+      .select('name', 'description', 'diet', 'snacks.session_id')
       .where('session_id', id)
       .returning('*')
 
-    console.log(snacks)
-
     return snacks
+  }
+
+  async metrics(id: string): Promise<IMetrics> {
+    const [totalSnacks] = await knex('snacks')
+      .count('name')
+      .where('session_id', id)
+
+    const total = +totalSnacks['count(`name`)'] || 0
+
+    const [totalInDiet] = await knex('snacks')
+      .count('diet as DietCount')
+      .where('session_id', id)
+      .where('diet', 'yes')
+
+    const inDiet = +totalInDiet['DietCount'] || 0
+
+    const [totalOffDiet] = await knex('snacks')
+      .count('diet as DietCount')
+      .where('session_id', id)
+      .where('diet', 'no')
+
+    const offDiet = +totalOffDiet['DietCount'] || 0
+
+    const snackSequences = await knex('snacks')
+      .select('diet')
+      .where('session_id', id)
+
+    let cont = 0
+    let maxSequence = 0
+
+    for (const sequence of snackSequences) {
+      if (sequence.diet === 'yes') {
+        cont++
+        maxSequence = Math.max(maxSequence, cont)
+      } else {
+        cont = 0
+      }
+    }
+
+    const metricsSnack = { total, inDiet, offDiet, maxSequence }
+    return metricsSnack
   }
 }
 

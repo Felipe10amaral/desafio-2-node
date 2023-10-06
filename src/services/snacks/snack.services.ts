@@ -120,6 +120,17 @@ class Snack {
       return reply.status(400).send({ error: 'user not snacks' })
     }
   }
+
+  async metrics(request, reply) {
+    const { id } = request.params as { id: string }
+
+    try {
+      const summary = await snackRepository.metrics(id)
+      return reply.status(200).send(summary)
+    } catch (error) {
+      return reply.status(400).send(error)
+    }
+  }
 }
 
 export default new Snack()

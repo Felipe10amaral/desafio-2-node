@@ -38,4 +38,8 @@ export async function snacksRoutes(app: FastifyInstance) {
   app.put('/snack/:id', (request: FastifyRequest, reply: FastifyReply) => {
     snackServices.update(request, reply)
   })
+
+  app.get('/summary/:id', (request: FastifyRequest, reply: FastifyReply) => {
+    snackServices.metrics(request, reply)
+  })
 }
