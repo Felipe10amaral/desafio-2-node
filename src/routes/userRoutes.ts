@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import userServices from '../services/users/user.services'
+import { authorization } from '../middleware/authorization'
 
 export async function usersRoutes(app: FastifyInstance) {
   app.post('/users', (request: FastifyRequest, reply: FastifyReply) => {
@@ -14,7 +15,11 @@ export async function usersRoutes(app: FastifyInstance) {
     userServices.login(request, reply)
   })
 
-  app.delete('/user/:id', (request: FastifyRequest, reply: FastifyReply) => {
-    userServices.delete(request, reply)
-  })
+  app.delete(
+    '/user/:id',
+    { preHandler: [authorization] },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      userServices.delete(request, reply)
+    },
+  )
 }

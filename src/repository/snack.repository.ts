@@ -34,7 +34,7 @@ class SnackRepository {
   }
 
   async listOne(id: string) {
-    const snacks = await knex('snacks').select().where({ id_snack: id }).first()
+    const snacks = await knex('snacks').select().where('id_snack', id).first()
     return snacks
   }
 

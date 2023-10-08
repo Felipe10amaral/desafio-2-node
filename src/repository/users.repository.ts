@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 import { knex } from '../database'
 
-interface IUser {
+export interface IUser {
   id?: string
   name: string
   password: string
@@ -32,6 +32,15 @@ class UserRepository {
 
   async delete(id: string) {
     await knex('users').delete().where({ id })
+  }
+
+  async listUserId(id: string) {
+    const user: IUser | null = await knex('users')
+      .select()
+      .where('id', id)
+      .first()
+
+    return user
   }
 }
 

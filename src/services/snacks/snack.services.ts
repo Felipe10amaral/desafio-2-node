@@ -64,12 +64,22 @@ class Snack {
   }
 
   async delete(request, reply) {
-    const { id } = request.params as { id: string }
+    const { IDsnack } = request.params as { IDsnack: string }
 
-    console.log(id)
+    const { id: idUser } = request.user
+
+    const snack = await snackRepository.listOne(IDsnack)
+
+    if (!snack) {
+      return reply.status(400).send({ error: 'refeicao nao encontrada' })
+    }
+
+    if (snack.session_id !== idUser) {
+      return reply.status(401).send({ error: 'Unauthorized' })
+    }
 
     try {
-      await snackRepository.delete(id)
+      await snackRepository.delete(IDsnack)
       return reply.status(204).send()
     } catch (error) {
       return reply.status(500).send(error)
@@ -77,9 +87,22 @@ class Snack {
   }
 
   async update(request, reply) {
-    const { name, description, created_at, diet, session_id } =
-      request.body as RequestBody
+    const { name, description, created_at, diet } = request.body as RequestBody
     const { id } = request.params as { id: string }
+
+    const { id: idUser } = request.user
+
+    const snacks = await snackRepository.listOne(id)
+
+    if (!snacks) {
+      return reply.status(400).send({ error: 'refeicao nao encontrada' })
+    }
+
+    const session_id = snacks.session_id
+
+    if (session_id !== idUser) {
+      return reply.status(401).send({ error: 'Unauthorized' })
+    }
 
     const snack = {
       name,
@@ -101,6 +124,20 @@ class Snack {
 
   async listOne(request, reply) {
     const { id } = request.params as { id: string }
+    const { id: idUser } = request.user
+
+    const snacks = await snackRepository.listOne(id)
+
+    if (!snacks) {
+      return reply.status(400).send({ error: 'refeicao nao encontrada' })
+    }
+
+    console.log(snacks)
+    console.log(snacks.session_id)
+
+    if (snacks.session_id !== idUser) {
+      return reply.status(401).send({ error: 'Unauthorized' })
+    }
 
     try {
       const snack = await snackRepository.listOne(id)

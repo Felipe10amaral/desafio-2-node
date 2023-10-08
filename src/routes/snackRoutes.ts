@@ -27,19 +27,35 @@ export async function snacksRoutes(app: FastifyInstance) {
     },
   )
 
-  app.get('/snack/:id', (request: FastifyRequest, reply: FastifyReply) => {
-    snackServices.listOne(request, reply)
-  })
+  app.get(
+    '/snack/:id',
+    { preHandler: [authorization] },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      snackServices.listOne(request, reply)
+    },
+  )
 
-  app.delete('/snack/:id', (request: FastifyRequest, reply: FastifyReply) => {
-    snackServices.delete(request, reply)
-  })
+  app.delete(
+    '/snack/:IDsnack',
+    { preHandler: [authorization] },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      snackServices.delete(request, reply)
+    },
+  )
 
-  app.put('/snack/:id', (request: FastifyRequest, reply: FastifyReply) => {
-    snackServices.update(request, reply)
-  })
+  app.put(
+    '/snack/:id',
+    { preHandler: [authorization] },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      snackServices.update(request, reply)
+    },
+  )
 
-  app.get('/summary/:id', (request: FastifyRequest, reply: FastifyReply) => {
-    snackServices.metrics(request, reply)
-  })
+  app.get(
+    '/summary/:id',
+    { preHandler: [authorization] },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      snackServices.metrics(request, reply)
+    },
+  )
 }
